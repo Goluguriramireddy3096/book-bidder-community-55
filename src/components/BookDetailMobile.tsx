@@ -15,7 +15,8 @@ import {
   Star, 
   ArrowRight,
   ChevronDown,
-  ShoppingCart 
+  ShoppingCart,
+  Check 
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -32,7 +33,7 @@ interface BookDetailMobileProps {
 const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
-  const { addToCart } = useCart();
+  const { addToCart, isBookInCart } = useCart();
   
   // Add swipe to go back functionality
   useTouchGestures(containerRef, {
@@ -54,6 +55,8 @@ const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
   const handleAddToCart = () => {
     addToCart(book);
   };
+
+  const alreadyInCart = isBookInCart(book.id);
   
   return (
     <div 
@@ -153,11 +156,20 @@ const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
         ) : (
           <div className="grid grid-cols-2 gap-3 mb-6">
             <Button 
-              className="w-full bg-book-accent hover:bg-book-accent/90 flex items-center justify-center"
+              className={`w-full flex items-center justify-center ${alreadyInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-book-accent hover:bg-book-accent/90'}`}
               onClick={handleAddToCart}
             >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              Add to Cart
+              {alreadyInCart ? (
+                <>
+                  <Check className="w-4 h-4 mr-2" />
+                  Added
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Add to Cart
+                </>
+              )}
             </Button>
             <Link to="/cart">
               <Button variant="outline" className="w-full">

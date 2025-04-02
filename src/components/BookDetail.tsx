@@ -28,7 +28,8 @@ const BookDetail = ({ book }: BookDetailProps) => {
     views
   } = book;
   
-  const { addToCart } = useCart();
+  const { addToCart, isBookInCart } = useCart();
+  const alreadyInCart = isBookInCart(book.id);
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -156,10 +157,23 @@ const BookDetail = ({ book }: BookDetailProps) => {
                 
                 <button 
                   onClick={handleAddToCart}
-                  className="px-6 py-3 bg-book-accent text-white rounded-md hover:bg-book-accent/90 transition-colors flex items-center"
+                  className={`px-6 py-3 rounded-md flex items-center transition-colors ${
+                    alreadyInCart 
+                      ? 'bg-green-600 text-white hover:bg-green-700' 
+                      : 'bg-book-accent text-white hover:bg-book-accent/90'
+                  }`}
                 >
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart
+                  {alreadyInCart ? (
+                    <>
+                      <Check className="w-4 h-4 mr-2" />
+                      Added to Cart
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Add to Cart
+                    </>
+                  )}
                 </button>
               </div>
             )}
