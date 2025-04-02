@@ -53,7 +53,9 @@ const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
   };
 
   const handleAddToCart = () => {
-    addToCart(book);
+    if (!book.isAuction && !alreadyInCart) {
+      addToCart(book);
+    }
   };
 
   const alreadyInCart = isBookInCart(book.id);
@@ -158,6 +160,7 @@ const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
             <Button 
               className={`w-full flex items-center justify-center ${alreadyInCart ? 'bg-green-600 hover:bg-green-700' : 'bg-book-accent hover:bg-book-accent/90'}`}
               onClick={handleAddToCart}
+              disabled={alreadyInCart}
             >
               {alreadyInCart ? (
                 <>

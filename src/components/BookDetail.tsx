@@ -55,7 +55,9 @@ const BookDetail = ({ book }: BookDetailProps) => {
   };
 
   const handleAddToCart = () => {
-    addToCart(book);
+    if (!alreadyInCart && !isAuction) {
+      addToCart(book);
+    }
   };
 
   return (
