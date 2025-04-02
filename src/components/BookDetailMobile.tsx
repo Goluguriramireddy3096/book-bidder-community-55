@@ -14,13 +14,15 @@ import {
   User, 
   Star, 
   ArrowRight,
-  ChevronDown 
+  ChevronDown,
+  ShoppingCart 
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import LiveBidInterface from './LiveBidInterface';
 import { BookService } from '@/lib/bookService';
+import { useCart } from '@/contexts/CartContext';
 
 interface BookDetailMobileProps {
   book: Book;
@@ -30,6 +32,7 @@ interface BookDetailMobileProps {
 const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const { addToCart } = useCart();
   
   // Add swipe to go back functionality
   useTouchGestures(containerRef, {
@@ -46,6 +49,10 @@ const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
     if (end <= now) return 'Auction ended';
     
     return `Ends ${formatDistanceToNow(end, { addSuffix: true })}`;
+  };
+
+  const handleAddToCart = () => {
+    addToCart(book);
   };
   
   return (
@@ -145,12 +152,18 @@ const BookDetailMobile = ({ book, onNavigateBack }: BookDetailMobileProps) => {
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 mb-6">
-            <Button className="w-full bg-book-accent hover:bg-book-accent/90">
-              Buy Now ({BookService.formatPrice(book.price)})
-            </Button>
-            <Button variant="outline" className="w-full">
+            <Button 
+              className="w-full bg-book-accent hover:bg-book-accent/90 flex items-center justify-center"
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
               Add to Cart
             </Button>
+            <Link to="/cart">
+              <Button variant="outline" className="w-full">
+                View Cart
+              </Button>
+            </Link>
           </div>
         )}
         

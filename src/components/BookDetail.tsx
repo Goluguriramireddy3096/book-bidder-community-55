@@ -1,8 +1,9 @@
 
 import { Book } from '@/lib/data';
-import { Check, Award, Clock, AlertCircle } from 'lucide-react';
+import { Check, Award, Clock, AlertCircle, ShoppingCart } from 'lucide-react';
 import LiveBidInterface from './LiveBidInterface';
 import { BookService } from '@/lib/bookService';
+import { useCart } from '@/contexts/CartContext';
 
 interface BookDetailProps {
   book: Book;
@@ -27,6 +28,8 @@ const BookDetail = ({ book }: BookDetailProps) => {
     views
   } = book;
   
+  const { addToCart } = useCart();
+
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -48,6 +51,10 @@ const BookDetail = ({ book }: BookDetailProps) => {
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
     
     return `${days > 0 ? `${days} days, ` : ''}${hours} hours, ${minutes} minutes`;
+  };
+
+  const handleAddToCart = () => {
+    addToCart(book);
   };
 
   return (
@@ -147,8 +154,12 @@ const BookDetail = ({ book }: BookDetailProps) => {
                   </p>
                 </div>
                 
-                <button className="px-6 py-3 bg-book-accent text-white rounded-md hover:bg-book-accent/90 transition-colors">
-                  Buy Now
+                <button 
+                  onClick={handleAddToCart}
+                  className="px-6 py-3 bg-book-accent text-white rounded-md hover:bg-book-accent/90 transition-colors flex items-center"
+                >
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Add to Cart
                 </button>
               </div>
             )}

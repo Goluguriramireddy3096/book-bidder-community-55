@@ -1,9 +1,10 @@
 
 import { Link } from 'react-router-dom';
-import { Clock, ArrowUp, Award } from 'lucide-react';
+import { Clock, ArrowUp, Award, ShoppingCart } from 'lucide-react';
 import { Book } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { BookService } from '@/lib/bookService';
+import { useCart } from '@/contexts/CartContext';
 
 interface BookCardProps {
   book: Book;
@@ -23,6 +24,7 @@ const BookCard = ({ book, className, animationDelay = 0 }: BookCardProps) => {
     condition 
   } = book;
   
+  const { addToCart } = useCart();
   const formattedPrice = BookService.formatPrice(isAuction ? auctionData?.currentBid || 0 : price);
 
   const timeLeft = () => {
@@ -44,6 +46,12 @@ const BookCard = ({ book, className, animationDelay = 0 }: BookCardProps) => {
     if (hours > 0) return `${hours}h ${minutes}m left`;
     
     return `${minutes}m left`;
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(book);
   };
 
   return (
@@ -76,6 +84,16 @@ const BookCard = ({ book, className, animationDelay = 0 }: BookCardProps) => {
             <div className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm text-gray-800 text-xs font-medium px-2 py-1 rounded-full">
               {condition}
             </div>
+          )}
+
+          {!isAuction && (
+            <button
+              onClick={handleAddToCart}
+              className="absolute bottom-3 right-3 bg-book-accent text-white p-2 rounded-full transform translate-y-10 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+              aria-label="Add to cart"
+            >
+              <ShoppingCart className="w-4 h-4" />
+            </button>
           )}
         </div>
         

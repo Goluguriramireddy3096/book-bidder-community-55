@@ -5,6 +5,7 @@ import { Search, User, ShoppingBag, Menu, X, ArrowLeft, LogOut, BadgeIndianRupee
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useAuth } from '@/contexts/AuthContext';
+import CartNav from '@/components/CartNav';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -135,6 +136,9 @@ const Navbar = () => {
             <Search className="w-5 h-5" />
           </button>
           
+          {/* Cart Icon */}
+          <CartNav />
+          
           {/* User menu - Using Sheet for mobile and DropdownMenu for desktop */}
           {isAuthenticated ? (
             isMobile ? (
@@ -166,6 +170,12 @@ const Navbar = () => {
                         Dashboard
                       </button>
                     )}
+                    <button 
+                      className="w-full text-left py-3 px-2 hover:bg-gray-100 rounded-md"
+                      onClick={() => handleNavigation('/cart')}
+                    >
+                      My Cart
+                    </button>
                     <button 
                       className="w-full text-left py-3 px-2 hover:bg-gray-100 rounded-md"
                       onClick={() => handleNavigation('/sell')}
@@ -205,6 +215,9 @@ const Navbar = () => {
                       Dashboard
                     </DropdownMenuItem>
                   )}
+                  <DropdownMenuItem onSelect={() => navigate('/cart')}>
+                    My Cart
+                  </DropdownMenuItem>
                   <DropdownMenuItem onSelect={() => navigate('/sell')}>
                     Sell Books
                   </DropdownMenuItem>
@@ -250,6 +263,16 @@ const Navbar = () => {
                       {link.name}
                     </button>
                   ))}
+                
+                  <button 
+                    onClick={() => handleNavigation('/cart')}
+                    className={cn(
+                      "text-lg font-medium py-3 border-b border-gray-100 flex items-center text-left w-full",
+                      isActive('/cart') ? "text-book-accent" : "text-gray-800"
+                    )}
+                  >
+                    Cart
+                  </button>
                 
                   {!isAuthenticated && (
                     <>
@@ -301,6 +324,16 @@ const Navbar = () => {
                 {link.name}
               </button>
             ))}
+            
+            <button 
+              onClick={() => handleNavigation('/cart')}
+              className={cn(
+                "text-lg font-medium py-4 border-b border-gray-100 flex items-center text-left w-full",
+                isActive('/cart') ? "text-book-accent" : "text-gray-800"
+              )}
+            >
+              Cart
+            </button>
             
             {!isAuthenticated ? (
               <>
